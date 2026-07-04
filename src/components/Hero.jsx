@@ -51,15 +51,6 @@ export default function Hero() {
     <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0 2rem' }}>
       <HeroCanvas isDark={isDark} />
 
-      {/* Grid overlay */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: isDark
-          ? 'linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px)'
-          : 'linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-        pointerEvents: 'none',
-      }} />
 
       {/* Gradient fade bottom */}
       <div style={{

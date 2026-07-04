@@ -6,11 +6,11 @@ import * as THREE from 'three';
 function BgParticles({ isDark }) {
   const ref = useRef();
   const positions = useMemo(() => {
-    const p = new Float32Array(3500 * 3);
-    for (let i = 0; i < 3500; i++) {
-      p[i * 3] = (Math.random() - 0.5) * 35;
-      p[i * 3 + 1] = (Math.random() - 0.5) * 35;
-      p[i * 3 + 2] = (Math.random() - 0.5) * 12 - 6;
+    const p = new Float32Array(12000 * 3);
+    for (let i = 0; i < 12000; i++) {
+      p[i * 3] = (Math.random() - 0.5) * 45;
+      p[i * 3 + 1] = (Math.random() - 0.5) * 45;
+      p[i * 3 + 2] = (Math.random() - 0.5) * 15 - 7.5;
     }
     return p;
   }, []);
@@ -26,10 +26,10 @@ function BgParticles({ isDark }) {
       <PointMaterial
         transparent
         color={isDark ? '#00f5ff' : '#6366f1'}
-        size={0.035}
+        size={0.038}
         sizeAttenuation
         depthWrite={false}
-        opacity={0.6}
+        opacity={0.65}
       />
     </Points>
   );

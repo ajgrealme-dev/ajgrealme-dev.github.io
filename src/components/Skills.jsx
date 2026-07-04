@@ -46,7 +46,7 @@ function Word({ children, isDark, ...props }) {
   );
 }
 
-function Cloud({ radius = 4.6, isDark }) {
+function Cloud({ radius = 5.2, isDark }) {
   const words = useMemo(() => {
     const list = [
       'JavaScript', 'Node.js', 'React', 'SQL', 'SQLite', 
@@ -227,6 +227,8 @@ export default function Skills() {
             position: 'relative',
             overflow: 'hidden',
             height: '380px',
+            maxWidth: '750px',
+            margin: '3rem auto 0',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -234,14 +236,14 @@ export default function Skills() {
           }}>
           <h3 style={{ 
             position: 'absolute', top: '1.5rem', left: '2rem', 
-            color: accentColor, fontWeight: 700, fontSize: '1.2rem', 
+            color: accentColor, fontWeight: 700, fontSize: '1.1rem', 
             textTransform: 'uppercase', letterSpacing: '2px', 
             fontFamily: 'Playfair Display, serif', zIndex: 10 
           }}>
             {isDark ? 'Interactive Tech & Soft Skills Sphere' : 'Interactive Tech & Soft Skills Sphere'}
           </h3>
           <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, top: '2.5rem' }}>
-            <Canvas camera={{ position: [0, 0, 7.5], fov: 60 }} style={{ pointerEvents: 'none' }}>
+            <Canvas camera={{ position: [0, 0, 6.2], fov: 60 }} style={{ pointerEvents: 'none' }}>
               <Cloud isDark={isDark} />
             </Canvas>
           </div>
