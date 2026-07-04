@@ -5,21 +5,39 @@ import { Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useApp } from '../context/AppContext';
 
+const SOFT_SKILLS_LIST = [
+  'Disiplin & Integritas',
+  'Ketelitian Data',
+  'Kemauan Belajar',
+  'Kepatuhan Aturan'
+];
+
 function Word({ children, isDark, ...props }) {
   const ref = useRef();
+  const isSoft = SOFT_SKILLS_LIST.includes(children);
+  const color = isSoft 
+    ? (isDark ? '#39ff14' : '#16a34a')
+    : (isDark ? '#00f5ff' : '#6366f1');
+  const borderColor = isSoft
+    ? (isDark ? 'rgba(57, 255, 20, 0.45)' : 'rgba(22, 163, 74, 0.45)')
+    : (isDark ? 'rgba(0, 245, 255, 0.25)' : 'rgba(99, 102, 241, 0.25)');
+  const boxShadow = isSoft
+    ? (isDark ? '0 0 12px rgba(57,255,20,0.25)' : '0 4px 10px rgba(22,163,74,0.15)')
+    : (isDark ? '0 0 10px rgba(0,245,255,0.1)' : '0 4px 10px rgba(99,102,241,0.05)');
+
   return (
     <Html ref={ref} {...props} distanceFactor={12} center>
       <span style={{
-        color: isDark ? '#00f5ff' : '#6366f1',
+        color,
         fontSize: '0.8rem',
         fontWeight: 700,
         fontFamily: 'JetBrains Mono, monospace',
         background: isDark ? 'rgba(5, 5, 15, 0.75)' : 'rgba(255, 255, 255, 0.85)',
         padding: '4px 10px',
         borderRadius: '6px',
-        border: `1px solid ${isDark ? 'rgba(0, 245, 255, 0.25)' : 'rgba(99, 102, 241, 0.25)'}`,
+        border: `1px solid ${borderColor}`,
         whiteSpace: 'nowrap',
-        boxShadow: isDark ? '0 0 10px rgba(0,245,255,0.1)' : '0 4px 10px rgba(99,102,241,0.05)',
+        boxShadow,
         cursor: 'default',
         userSelect: 'none',
         display: 'block'
@@ -28,13 +46,14 @@ function Word({ children, isDark, ...props }) {
   );
 }
 
-function Cloud({ count = 20, radius = 4.2, isDark }) {
+function Cloud({ radius = 4.6, isDark }) {
   const words = useMemo(() => {
     const list = [
       'JavaScript', 'Node.js', 'React', 'SQL', 'SQLite', 
       'HTML', 'CSS', 'Gemini API', 'Otomasi', 'Data Entry', 
       'MS Excel', 'MS Word', 'Three.js', 'Python', 'MT5', 
-      'OpenCV', 'MediaPipe', 'Git', 'GitHub', 'AI Bot'
+      'OpenCV', 'MediaPipe', 'Git', 'GitHub', 'AI Bot',
+      'Disiplin & Integritas', 'Ketelitian Data', 'Kemauan Belajar', 'Kepatuhan Aturan'
     ];
     const temp = [];
     const spherical = new THREE.Spherical();
@@ -198,49 +217,33 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Bottom Section: Combined Soft Skills & 3D Tech Sphere */}
+        {/* Bottom Section: Integrated Tech & Soft Skills 3D Sphere */}
         <motion.div initial={{ opacity: 0, y: 50 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5 }}
           style={{
             background: isDark ? 'rgba(139, 92, 246, 0.04)' : 'rgba(99, 102, 241, 0.05)',
             border: `1px solid ${isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99, 102, 241, 0.2)'}`,
-            borderRadius: '24px', padding: '2.5rem', backdropFilter: 'blur(10px)',
+            borderRadius: '24px', padding: '2rem', backdropFilter: 'blur(10px)',
             marginTop: '3rem',
+            position: 'relative',
+            overflow: 'hidden',
+            height: '380px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          <div className="skills-bottom-grid">
-            {/* Left: Soft Skills Details */}
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h3 style={{ color: accentColor, marginBottom: '2rem', fontWeight: 700, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Playfair Display, serif' }}>
-                {isDark ? 'Soft skill' : 'Soft skill'}
-              </h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem' }} className="soft-skills-grid">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '1.5rem' }}>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Disiplin & Integritas' : 'Discipline & Integrity'}</div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Ketelitian Data' : 'Data Accuracy'}</div>
-                </div>
-                <div style={{ width: '1.5px', background: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(99, 102, 241, 0.2)', margin: '0.2rem 0' }} className="soft-skills-divider" />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '1.5rem' }}>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kemauan Belajar' : 'Eagerness to Learn'}</div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kepatuhan Aturan' : 'Rule Compliance'}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: 3D Tech Sphere */}
-            <div style={{
-              height: '320px', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden',
-              background: isDark ? 'rgba(0,245,255,0.015)' : 'rgba(99,102,241,0.015)',
-              border: `1px dashed ${isDark ? 'rgba(0,245,255,0.1)' : 'rgba(99,102,241,0.1)'}`,
-              borderRadius: '16px',
-            }}>
-              <h3 style={{ position: 'absolute', top: '1.2rem', left: '1.5rem', color: accentColor, fontWeight: 700, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Playfair Display, serif', zIndex: 10 }}>
-                {isDark ? 'Tech Sphere 3D' : '3D Tech Sphere'}
-              </h3>
-              <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, top: '2rem' }}>
-                <Canvas camera={{ position: [0, 0, 7.5], fov: 60 }} style={{ pointerEvents: 'none' }}>
-                  <Cloud isDark={isDark} />
-                </Canvas>
-              </div>
-            </div>
+          <h3 style={{ 
+            position: 'absolute', top: '1.5rem', left: '2rem', 
+            color: accentColor, fontWeight: 700, fontSize: '1.2rem', 
+            textTransform: 'uppercase', letterSpacing: '2px', 
+            fontFamily: 'Playfair Display, serif', zIndex: 10 
+          }}>
+            {isDark ? 'Interactive Tech & Soft Skills Sphere' : 'Interactive Tech & Soft Skills Sphere'}
+          </h3>
+          <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, top: '2.5rem' }}>
+            <Canvas camera={{ position: [0, 0, 7.5], fov: 60 }} style={{ pointerEvents: 'none' }}>
+              <Cloud isDark={isDark} />
+            </Canvas>
           </div>
         </motion.div>
       </div>

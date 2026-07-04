@@ -6,11 +6,11 @@ import * as THREE from 'three';
 function BgParticles({ isDark }) {
   const ref = useRef();
   const positions = useMemo(() => {
-    const p = new Float32Array(1500 * 3);
-    for (let i = 0; i < 1500; i++) {
-      p[i * 3] = (Math.random() - 0.5) * 30;
-      p[i * 3 + 1] = (Math.random() - 0.5) * 30;
-      p[i * 3 + 2] = (Math.random() - 0.5) * 10 - 5;
+    const p = new Float32Array(3500 * 3);
+    for (let i = 0; i < 3500; i++) {
+      p[i * 3] = (Math.random() - 0.5) * 35;
+      p[i * 3 + 1] = (Math.random() - 0.5) * 35;
+      p[i * 3 + 2] = (Math.random() - 0.5) * 12 - 6;
     }
     return p;
   }, []);
@@ -26,10 +26,10 @@ function BgParticles({ isDark }) {
       <PointMaterial
         transparent
         color={isDark ? '#00f5ff' : '#6366f1'}
-        size={0.025}
+        size={0.035}
         sizeAttenuation
         depthWrite={false}
-        opacity={0.35}
+        opacity={0.6}
       />
     </Points>
   );
@@ -44,10 +44,10 @@ function SmallGeo({ position, color, speed }) {
     }
   });
   return (
-    <Float speed={speed * 2} rotationIntensity={0.5} floatIntensity={0.3}>
+    <Float speed={speed * 2} rotationIntensity={0.6} floatIntensity={0.4}>
       <mesh ref={ref} position={position}>
-        <octahedronGeometry args={[0.22, 0]} />
-        <meshStandardMaterial color={color} wireframe transparent opacity={0.45} emissive={color} emissiveIntensity={0.25} />
+        <octahedronGeometry args={[0.42, 0]} />
+        <meshStandardMaterial color={color} wireframe transparent opacity={0.65} emissive={color} emissiveIntensity={0.4} />
       </mesh>
     </Float>
   );
@@ -62,10 +62,10 @@ function SmallRing({ position, color, speed }) {
     }
   });
   return (
-    <Float speed={speed * 2} rotationIntensity={0.6} floatIntensity={0.4}>
+    <Float speed={speed * 2} rotationIntensity={0.7} floatIntensity={0.45}>
       <mesh ref={ref} position={position}>
-        <torusGeometry args={[0.35, 0.04, 8, 32]} />
-        <meshStandardMaterial color={color} wireframe transparent opacity={0.45} emissive={color} emissiveIntensity={0.25} />
+        <torusGeometry args={[0.65, 0.05, 12, 48]} />
+        <meshStandardMaterial color={color} wireframe transparent opacity={0.65} emissive={color} emissiveIntensity={0.4} />
       </mesh>
     </Float>
   );
@@ -80,10 +80,10 @@ function SmallIcosa({ position, color, speed }) {
     }
   });
   return (
-    <Float speed={speed * 2} rotationIntensity={0.5} floatIntensity={0.35}>
+    <Float speed={speed * 2} rotationIntensity={0.6} floatIntensity={0.4}>
       <mesh ref={ref} position={position}>
-        <icosahedronGeometry args={[0.24, 1]} />
-        <meshStandardMaterial color={color} wireframe transparent opacity={0.45} emissive={color} emissiveIntensity={0.2} />
+        <icosahedronGeometry args={[0.4, 1]} />
+        <meshStandardMaterial color={color} wireframe transparent opacity={0.65} emissive={color} emissiveIntensity={0.35} />
       </mesh>
     </Float>
   );
@@ -133,8 +133,9 @@ export default function BackgroundCanvas({ isDark }) {
       style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
       gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={0.3} />
-      <pointLight position={[5, 5, 5]} intensity={0.6} color={isDark ? '#00f5ff' : '#6366f1'} />
+      <ambientLight intensity={0.4} />
+      <pointLight position={[5, 5, 5]} intensity={0.7} color={isDark ? '#00f5ff' : '#6366f1'} />
+      <pointLight position={[-5, -5, 5]} intensity={0.5} color={isDark ? '#39ff14' : '#8b5cf6'} />
 
       <ParallaxGroup>
         <BgParticles isDark={isDark} />
