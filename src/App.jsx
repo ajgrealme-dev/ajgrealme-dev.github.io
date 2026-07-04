@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import BackgroundCanvas from './components/BackgroundCanvas';
+import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -73,6 +74,7 @@ function AppContent() {
         colorScheme: isDark ? 'dark' : 'light',
       }}
     >
+      <CustomCursor />
       <ScrollProgress />
       <BackgroundCanvas isDark={isDark} />
       <Navbar activeSection={activeSection} />

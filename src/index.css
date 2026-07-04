@@ -129,3 +129,9 @@ img { max-width: 100%; height: auto; }
     gap: 2rem !important;
   }
 }
+
+@media (min-width: 769px) {
+  body, html, a, button, input, textarea, [role="button"], .projects-scroll-container > div {
+    cursor: none !important;
+  }
+}
