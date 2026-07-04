@@ -1,4 +1,5 @@
-# React + Vite
+# Aziz Maulana - Portfolio Website
+Personal 3D developer portfolio website built with React + Vite + Three.js.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
