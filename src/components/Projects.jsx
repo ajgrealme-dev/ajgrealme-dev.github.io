@@ -1,16 +1,30 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 
-function FlipCard({ project, isDark }) {
+function FlipCard({ project, isDark, scrollVelocity = 0 }) {
   const [flipped, setFlipped] = useState(false);
   const accentColor = isDark ? '#00f5ff' : '#6366f1';
   const textColor = isDark ? '#e2e8f0' : '#1e293b';
   const subColor = isDark ? '#94a3b8' : '#64748b';
+
+  const tiltStyle = {
+    transform: `rotateY(${scrollVelocity}deg) skewX(${-scrollVelocity * 0.25}deg)`,
+    transition: 'transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+  };
+
   return (
     <div
       onClick={() => setFlipped(!flipped)}
-      style={{ perspective: '1200px', cursor: 'pointer', minHeight: '420px', width: 'min(350px, 85vw)', flex: '0 0 min(350px, 85vw)', scrollSnapAlign: 'start' }}
+      style={{ 
+        perspective: '1200px', 
+        cursor: 'pointer', 
+        minHeight: '420px', 
+        width: 'min(350px, 85vw)', 
+        flex: '0 0 min(350px, 85vw)', 
+        scrollSnapAlign: 'start',
+        ...tiltStyle
+      }}
     >
       <motion.div
         animate={{ rotateY: flipped ? 180 : 0 }}
@@ -118,6 +132,44 @@ export default function Projects() {
   const accentColor = isDark ? '#00f5ff' : '#6366f1';
   const textColor = isDark ? '#e2e8f0' : '#1e293b';
 
+  const containerRef = useRef(null);
+  const [scrollVelocity, setScrollVelocity] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let lastScrollLeft = el.scrollLeft;
+    let lastTime = Date.now();
+    let timeoutId = null;
+
+    const handleScroll = () => {
+      const currentScrollLeft = el.scrollLeft;
+      const currentTime = Date.now();
+      const deltaTime = currentTime - lastTime;
+      if (deltaTime > 0) {
+        const deltaX = currentScrollLeft - lastScrollLeft;
+        // Calculate velocity (px/ms) and clamp it between -12 and 12
+        const velocity = Math.max(-12, Math.min(12, (deltaX / deltaTime) * 8));
+        setScrollVelocity(velocity);
+      }
+      lastScrollLeft = currentScrollLeft;
+      lastTime = currentTime;
+
+      // Reset velocity to 0 when scrolling stops
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setScrollVelocity(0);
+      }, 100);
+    };
+
+    el.addEventListener('scroll', handleScroll);
+    return () => {
+      el.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <section id="projects" ref={ref} style={{ padding: '120px 2rem', position: 'relative', zIndex: 10 }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -131,6 +183,7 @@ export default function Projects() {
         </motion.div>
 
         <motion.div 
+          ref={containerRef}
           initial={{ opacity: 0, y: 60 }} 
           animate={inView ? { opacity: 1, y: 0 } : {}} 
           transition={{ delay: 0.2, duration: 0.8 }}
@@ -147,7 +200,7 @@ export default function Projects() {
           className="projects-scroll-container"
         >
           {t.projects.items.map((proj, i) => (
-            <FlipCard key={i} project={proj} isDark={isDark} />
+            <FlipCard key={i} project={proj} isDark={isDark} scrollVelocity={scrollVelocity} />
           ))}
         </motion.div>
       </div>

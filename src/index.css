@@ -114,3 +114,18 @@ img { max-width: 100%; height: auto; }
     text-align: center !important;
   }
 }
+
+.skills-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .skills-bottom-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}

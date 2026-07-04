@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 
 export default function Contact() {
@@ -128,6 +128,7 @@ export default function Contact() {
                 borderRadius: '24px', padding: '2rem',
                 backdropFilter: 'blur(10px)',
                 display: 'flex', flexDirection: 'column', gap: '1rem',
+                position: 'relative',
               }}>
               <div style={{ position: 'relative', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, transparent, ${accentColor}, ${isDark ? '#39ff14' : '#8b5cf6'}, transparent)`, borderRadius: '2px', boxShadow: isDark ? `0 0 10px ${accentColor}` : 'none', marginBottom: '0.5rem' }} />
 
@@ -176,6 +177,36 @@ export default function Contact() {
                   : status === 'error' ? '❌ ' + t.contact.error
                   : '🚀 ' + t.contact.send}
               </motion.button>
+              
+              {/* Flying paper plane 3D animation */}
+              <AnimatePresence>
+                {(status === 'sending' || status === 'success') && (
+                  <motion.div
+                    initial={{ x: '-50%', y: 0, scale: 0.2, rotate: -45, opacity: 0 }}
+                    animate={{ 
+                      x: ['-50%', '50%', '150%', '250%'], 
+                      y: [0, -150, -250, -320], 
+                      scale: [0.5, 1.4, 1.2, 0.4], 
+                      rotate: [-45, -15, 20, 60], 
+                      opacity: [0, 1, 1, 0] 
+                    }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.6, ease: 'easeOut' }}
+                    style={{
+                      position: 'absolute',
+                      pointerEvents: 'none',
+                      fontSize: '3rem',
+                      color: accentColor,
+                      textShadow: isDark ? `0 0 20px ${accentColor}` : 'none',
+                      zIndex: 100,
+                      left: '50%',
+                      bottom: '2rem',
+                    }}
+                  >
+                    ✈️
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </form>
           </motion.div>
         </div>

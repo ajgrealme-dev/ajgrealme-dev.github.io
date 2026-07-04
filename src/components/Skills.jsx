@@ -1,6 +1,69 @@
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState, useMemo } from 'react';
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
+import * as THREE from 'three';
 import { useApp } from '../context/AppContext';
+
+function Word({ children, isDark, ...props }) {
+  const ref = useRef();
+  return (
+    <Html ref={ref} {...props} distanceFactor={12} center>
+      <span style={{
+        color: isDark ? '#00f5ff' : '#6366f1',
+        fontSize: '0.8rem',
+        fontWeight: 700,
+        fontFamily: 'JetBrains Mono, monospace',
+        background: isDark ? 'rgba(5, 5, 15, 0.75)' : 'rgba(255, 255, 255, 0.85)',
+        padding: '4px 10px',
+        borderRadius: '6px',
+        border: `1px solid ${isDark ? 'rgba(0, 245, 255, 0.25)' : 'rgba(99, 102, 241, 0.25)'}`,
+        whiteSpace: 'nowrap',
+        boxShadow: isDark ? '0 0 10px rgba(0,245,255,0.1)' : '0 4px 10px rgba(99,102,241,0.05)',
+        cursor: 'default',
+        userSelect: 'none',
+        display: 'block'
+      }} className="tech-sphere-word">{children}</span>
+    </Html>
+  );
+}
+
+function Cloud({ count = 20, radius = 4.2, isDark }) {
+  const words = useMemo(() => {
+    const list = [
+      'JavaScript', 'Node.js', 'React', 'SQL', 'SQLite', 
+      'HTML', 'CSS', 'Gemini API', 'Otomasi', 'Data Entry', 
+      'MS Excel', 'MS Word', 'Three.js', 'Python', 'MT5', 
+      'OpenCV', 'MediaPipe', 'Git', 'GitHub', 'AI Bot'
+    ];
+    const temp = [];
+    const spherical = new THREE.Spherical();
+    const phiInterval = Math.PI / (list.length + 1);
+    const thetaInterval = (Math.PI * 2 * (1 + Math.sqrt(5))) / list.length; // Fibonacci spiral
+    for (let i = 0; i < list.length; i++) {
+      spherical.set(radius, phiInterval * (i + 1), thetaInterval * i);
+      const pos = new THREE.Vector3().setFromSpherical(spherical);
+      temp.push([pos, list[i]]);
+    }
+    return temp;
+  }, [radius]);
+
+  const groupRef = useRef();
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.12;
+      groupRef.current.rotation.x = state.clock.elapsedTime * 0.04;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {words.map(([pos, word], idx) => (
+        <Word key={idx} position={pos} isDark={isDark}>{word}</Word>
+      ))}
+    </group>
+  );
+}
 
 function SkillTag({ name, isDark, delay }) {
   const accentColor = isDark ? '#00f5ff' : '#6366f1';
@@ -39,8 +102,31 @@ function SkillCategory({ cat, isDark, inView, catIndex }) {
   const cardBorder = isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99,102,241,0.2)';
   const textColor = isDark ? '#e2e8f0' : '#1e293b';
 
+  const cardRef = useRef();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 15 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 15 });
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const xVal = (e.clientX - rect.left - rect.width / 2) / rect.width;
+    const yVal = (e.clientY - rect.top - rect.height / 2) / rect.height;
+    x.set(xVal);
+    y.set(yVal);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 60, rotateX: -15 }}
       animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
       transition={{ duration: 0.7, delay: catIndex * 0.15 }}
@@ -53,6 +139,9 @@ function SkillCategory({ cat, isDark, inView, catIndex }) {
         transformStyle: 'preserve-3d',
         transition: 'box-shadow 0.3s ease',
         backdropFilter: 'blur(10px)',
+        rotateX,
+        rotateY,
+        perspective: '1000px',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
@@ -109,28 +198,50 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Soft Skills Section (Dual column layout) */}
-        <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5 }}
-          style={{
-            background: isDark ? 'rgba(139, 92, 246, 0.04)' : 'rgba(99, 102, 241, 0.05)',
-            border: `1px solid ${isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99, 102, 241, 0.2)'}`,
-            borderRadius: '24px', padding: '2.5rem 2rem', backdropFilter: 'blur(10px)',
-          }}>
-          <h3 style={{ color: accentColor, marginBottom: '2rem', fontWeight: 700, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Playfair Display, serif' }}>
-            {isDark ? 'Soft skill' : 'Soft skill'}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '2rem' }} className="soft-skills-grid">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '3rem' }}>
-              <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Disiplin & Integritas' : 'Discipline & Integrity'}</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Ketelitian Data' : 'Data Accuracy'}</div>
+        {/* Bottom Section: Soft Skills & 3D Tech Sphere */}
+        <div className="skills-bottom-grid">
+          {/* Soft Skills Section */}
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5 }}
+            style={{
+              background: isDark ? 'rgba(139, 92, 246, 0.04)' : 'rgba(99, 102, 241, 0.05)',
+              border: `1px solid ${isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99, 102, 241, 0.2)'}`,
+              borderRadius: '24px', padding: '2.5rem 2rem', backdropFilter: 'blur(10px)',
+              display: 'flex', flexDirection: 'column', justifyContent: 'center'
+            }}>
+            <h3 style={{ color: accentColor, marginBottom: '2rem', fontWeight: 700, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Playfair Display, serif' }}>
+              {isDark ? 'Soft skill' : 'Soft skill'}
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem' }} className="soft-skills-grid">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '1.5rem' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Disiplin & Integritas' : 'Discipline & Integrity'}</div>
+                <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Ketelitian Data' : 'Data Accuracy'}</div>
+              </div>
+              <div style={{ width: '1.5px', background: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(99, 102, 241, 0.2)', margin: '0.2rem 0' }} className="soft-skills-divider" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '1.5rem' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kemauan Belajar' : 'Eagerness to Learn'}</div>
+                <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kepatuhan Aturan' : 'Rule Compliance'}</div>
+              </div>
             </div>
-            <div style={{ width: '1.5px', background: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(99, 102, 241, 0.2)', margin: '0.2rem 0' }} className="soft-skills-divider" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', paddingLeft: '3rem' }}>
-              <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kemauan Belajar' : 'Eagerness to Learn'}</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 500, color: textColor }}>{isDark ? 'Kepatuhan Aturan' : 'Rule Compliance'}</div>
+          </motion.div>
+
+          {/* 3D Tech Sphere Section */}
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.6 }}
+            style={{
+              background: isDark ? 'rgba(139, 92, 246, 0.04)' : 'rgba(99, 102, 241, 0.05)',
+              border: `1px solid ${isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99, 102, 241, 0.2)'}`,
+              borderRadius: '24px', padding: '2.5rem 2rem', backdropFilter: 'blur(10px)',
+              height: '320px', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden'
+            }}>
+            <h3 style={{ color: accentColor, marginBottom: '1rem', fontWeight: 700, fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '1px', fontFamily: 'Playfair Display, serif', zIndex: 10 }}>
+              {isDark ? 'Tech Sphere 3D' : '3D Tech Sphere'}
+            </h3>
+            <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, top: '2rem' }}>
+              <Canvas camera={{ position: [0, 0, 7.5], fov: 60 }} style={{ pointerEvents: 'none' }}>
+                <Cloud isDark={isDark} />
+              </Canvas>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
