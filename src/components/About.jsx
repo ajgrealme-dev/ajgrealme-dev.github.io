@@ -48,7 +48,7 @@ export default function About() {
           <div style={{ width: '60px', height: '3px', background: `linear-gradient(90deg, ${accentColor}, ${isDark ? '#39ff14' : '#8b5cf6'})`, margin: '0 auto', borderRadius: '2px', boxShadow: isDark ? `0 0 10px ${accentColor}` : 'none' }} />
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+        <div className="about-grid">
           
           {/* Text on the Left */}
           <motion.div 
@@ -114,7 +114,7 @@ export default function About() {
             style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
             <Card3D isDark={isDark}>
-              <div style={{ position: 'relative', display: 'inline-block', width: '280px', height: '280px' }}>
+              <div style={{ position: 'relative', display: 'inline-block', width: 'min(280px, 75vw)', height: 'min(280px, 75vw)' }}>
                 {/* Glow behind circular photo */}
                 <div style={{
                   position: 'absolute', inset: '-6px',

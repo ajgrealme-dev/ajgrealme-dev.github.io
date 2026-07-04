@@ -112,8 +112,15 @@ export default function Navbar({ activeSection }) {
       {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-            style={{ background: isDark ? 'rgba(5,5,15,0.98)' : 'rgba(255,255,255,0.98)', backdropFilter: 'blur(20px)', padding: '1rem 2rem 1.5rem' }}>
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+            style={{ 
+              position: 'absolute', top: '70px', left: 0, right: 0,
+              background: isDark ? 'rgba(5,5,15,0.98)' : 'rgba(255,255,255,0.98)', 
+              backdropFilter: 'blur(20px)', padding: '1rem 2rem 1.5rem',
+              borderBottom: `1px solid ${isDark ? 'rgba(0,245,255,0.15)' : 'rgba(99,102,241,0.15)'}`,
+              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+              zIndex: 999
+            }}>
             {navItems.map((item) => (
               <a key={item.key} href={item.href} onClick={() => setMenuOpen(false)}
                 style={{ display: 'block', padding: '0.75rem 0', color: textColor, textDecoration: 'none', fontSize: '1rem', fontWeight: 500, borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>

@@ -10,7 +10,7 @@ function FlipCard({ project, isDark }) {
   return (
     <div
       onClick={() => setFlipped(!flipped)}
-      style={{ perspective: '1200px', cursor: 'pointer', minHeight: '420px', width: '350px', flex: '0 0 350px', scrollSnapAlign: 'start' }}
+      style={{ perspective: '1200px', cursor: 'pointer', minHeight: '420px', width: 'min(350px, 85vw)', flex: '0 0 min(350px, 85vw)', scrollSnapAlign: 'start' }}
     >
       <motion.div
         animate={{ rotateY: flipped ? 180 : 0 }}
