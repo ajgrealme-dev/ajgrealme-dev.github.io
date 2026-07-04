@@ -1,0 +1,156 @@
+import { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+
+function FlipCard({ project, isDark }) {
+  const [flipped, setFlipped] = useState(false);
+  const accentColor = isDark ? '#00f5ff' : '#6366f1';
+  const textColor = isDark ? '#e2e8f0' : '#1e293b';
+  const subColor = isDark ? '#94a3b8' : '#64748b';
+  return (
+    <div
+      onClick={() => setFlipped(!flipped)}
+      style={{ perspective: '1200px', cursor: 'pointer', minHeight: '420px', width: '350px', flex: '0 0 350px', scrollSnapAlign: 'start' }}
+    >
+      <motion.div
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{ position: 'relative', width: '100%', minHeight: '420px', transformStyle: 'preserve-3d' }}
+      >
+        {/* Front */}
+        <div style={{
+          position: 'absolute', inset: 0, backfaceVisibility: 'hidden',
+          background: isDark
+            ? 'linear-gradient(135deg, rgba(0,245,255,0.05), rgba(57,255,20,0.03))'
+            : 'linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04))',
+          border: `1px solid ${isDark ? 'rgba(0,245,255,0.2)' : 'rgba(99,102,241,0.2)'}`,
+          borderRadius: '24px',
+          padding: '2.5rem',
+          display: 'flex', flexDirection: 'column',
+          backdropFilter: 'blur(10px)',
+        }}>
+          {/* Glow */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+            background: `linear-gradient(90deg, transparent, ${accentColor}, ${isDark ? '#39ff14' : '#8b5cf6'}, transparent)`,
+            borderRadius: '24px 24px 0 0',
+            boxShadow: isDark ? `0 0 20px ${accentColor}` : 'none',
+          }} />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+            <div style={{
+              width: '56px', height: '56px', borderRadius: '16px',
+              background: `linear-gradient(135deg, ${accentColor}30, ${isDark ? '#39ff14' : '#8b5cf6'}20)`,
+              border: `1px solid ${accentColor}40`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.8rem',
+            }}>{project.icon || '🤖'}</div>
+            <span style={{
+              background: `${accentColor}20`, border: `1px solid ${accentColor}40`,
+              color: accentColor, fontSize: '0.75rem', fontFamily: 'JetBrains Mono, monospace',
+              padding: '4px 12px', borderRadius: '100px', fontWeight: 600,
+            }}>Personal Project</span>
+          </div>
+
+          <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.7rem', color: textColor, marginBottom: '0.5rem' }}>{project.title}</h3>
+          <p style={{ color: accentColor, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', marginBottom: '1rem' }}>{project.period}</p>
+          <p style={{ color: subColor, lineHeight: 1.7, flex: 1, fontSize: '0.95rem' }}>{project.desc}</p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '1.5rem' }}>
+            {project.tag.split(' · ').map(tag => (
+              <span key={tag} style={{
+                background: isDark ? 'rgba(0,245,255,0.08)' : 'rgba(99,102,241,0.1)',
+                border: `1px solid ${accentColor}30`,
+                color: accentColor, fontSize: '0.75rem', padding: '3px 10px', borderRadius: '6px', fontFamily: 'JetBrains Mono, monospace',
+              }}>{tag}</span>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '1.5rem', color: subColor, fontSize: '0.8rem', textAlign: 'center' }}>
+            {isDark ? '↺ Klik untuk lihat detail' : '↺ Click to see details'}
+          </div>
+        </div>
+
+        {/* Back */}
+        <div style={{
+          position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)',
+          background: isDark
+            ? 'linear-gradient(135deg, rgba(57,255,20,0.05), rgba(0,245,255,0.03))'
+            : 'linear-gradient(135deg, rgba(139,92,246,0.06), rgba(99,102,241,0.04))',
+          border: `1px solid ${isDark ? 'rgba(57,255,20,0.2)' : 'rgba(139,92,246,0.2)'}`,
+          borderRadius: '24px', padding: '2.5rem',
+          backdropFilter: 'blur(10px)',
+        }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: `linear-gradient(90deg, transparent, ${isDark ? '#39ff14' : '#8b5cf6'}, ${accentColor}, transparent)`, borderRadius: '24px 24px 0 0', boxShadow: isDark ? '0 0 20px #39ff14' : 'none' }} />
+
+          <h4 style={{ color: isDark ? '#39ff14' : '#8b5cf6', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', letterSpacing: '2px', marginBottom: '1.5rem' }}>
+            {isDark ? '// FITUR UTAMA' : '// KEY FEATURES'}
+          </h4>
+
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+            {project.points.map((pt, i) => (
+              <motion.li key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: flipped ? 1 : 0, x: flipped ? 0 : -20 }}
+                transition={{ delay: flipped ? 0.4 + i * 0.1 : 0 }}
+                style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: isDark ? '#a8c5d9' : '#4b5563', fontSize: '0.9rem', lineHeight: 1.6 }}
+              >
+                <span style={{ color: isDark ? '#39ff14' : '#8b5cf6', fontWeight: 700, marginTop: '2px', flexShrink: 0 }}>▸</span>
+                {pt}
+              </motion.li>
+            ))}
+          </ul>
+
+          <div style={{ marginTop: '2rem', color: subColor, fontSize: '0.8rem', textAlign: 'center' }}>
+            {isDark ? '↺ Klik untuk kembali' : '↺ Click to go back'}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export default function Projects() {
+  const { theme, t } = useApp();
+  const isDark = theme === 'dark';
+  const ref = useRef();
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const accentColor = isDark ? '#00f5ff' : '#6366f1';
+  const textColor = isDark ? '#e2e8f0' : '#1e293b';
+
+  return (
+    <section id="projects" ref={ref} style={{ padding: '120px 2rem', position: 'relative', zIndex: 10 }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <span style={{ color: accentColor, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', letterSpacing: '3px', fontWeight: 600 }}>{'<projects>'}</span>
+          <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(2rem, 5vw, 3rem)', color: textColor, margin: '0.5rem 0' }}>{t.projects.title}</h2>
+          <div style={{ width: '60px', height: '3px', background: `linear-gradient(90deg, ${accentColor}, ${isDark ? '#39ff14' : '#8b5cf6'})`, margin: '0 auto', borderRadius: '2px', boxShadow: isDark ? `0 0 10px ${accentColor}` : 'none' }} />
+          <p style={{ color: isDark ? '#94a3b8' : '#64748b', marginTop: '1rem', fontSize: '0.9rem' }}>
+            {isDark ? 'Klik card untuk melihat detail fitur' : 'Click the card to see feature details'}
+          </p>
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 60 }} 
+          animate={inView ? { opacity: 1, y: 0 } : {}} 
+          transition={{ delay: 0.2, duration: 0.8 }}
+          style={{ 
+            display: 'flex', 
+            gap: '2.5rem', 
+            overflowX: 'auto', 
+            padding: '1.5rem 0.75rem 2.5rem', 
+            scrollSnapType: 'x mandatory',
+            scrollBehavior: 'smooth',
+            scrollbarWidth: 'thin',
+            width: '100%',
+          }}
+          className="projects-scroll-container"
+        >
+          {t.projects.items.map((proj, i) => (
+            <FlipCard key={i} project={proj} isDark={isDark} />
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}

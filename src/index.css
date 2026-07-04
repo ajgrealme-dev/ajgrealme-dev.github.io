@@ -1,0 +1,101 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 70px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #05050f;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f5ff, #39ff14);
+  border-radius: 3px;
+}
+
+::selection {
+  background: rgba(0, 245, 255, 0.3);
+  color: #fff;
+}
+
+a { transition: color 0.2s ease; }
+
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .mobile-menu-btn { display: block !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom scrollbar for horizontal project list */
+.projects-scroll-container {
+  scrollbar-width: thin;
+}
+
+.dark .projects-scroll-container {
+  scrollbar-color: #00f5ff rgba(255, 255, 255, 0.05);
+}
+
+.light .projects-scroll-container {
+  scrollbar-color: #6366f1 rgba(0, 0, 0, 0.05);
+}
+
+.projects-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.dark .projects-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.light .projects-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+}
+
+.dark .projects-scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #00f5ff, #39ff14);
+  border-radius: 10px;
+}
+
+.light .projects-scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .soft-skills-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  .soft-skills-divider {
+    display: none !important;
+  }
+  .soft-skills-grid > div {
+    padding-left: 0 !important;
+    text-align: center !important;
+    align-items: center !important;
+  }
+}
