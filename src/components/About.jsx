@@ -88,7 +88,7 @@ export default function About() {
                 ['🎓', isDark ? 'Sedang kuliah S1 Manajemen — Universitas Pamulang' : 'S1 Management — Universitas Pamulang (In Progress)'],
                 ['🏫', isDark ? 'Lulus Daar Al-Ilmi Boarding School, 2025' : 'Graduated Daar Al-Ilmi Boarding School, 2025'],
                 ['📍', isDark ? 'Ciruas, Serang, Banten' : 'Ciruas, Serang, Banten'],
-                ['🚀', isDark ? 'Melamar ke PT Indah Kiat Serang' : 'Applying to PT Indah Kiat Serang'],
+                ['🚀', isDark ? 'Terbuka untuk peluang kerja baru' : 'Open to new opportunities'],
               ].map(([icon, text], i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                   <span style={{ 
