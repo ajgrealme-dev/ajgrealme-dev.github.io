@@ -44,8 +44,8 @@ export default function Hero() {
   const subColor = isDark ? '#94a3b8' : '#64748b';
 
   const roles = isDark
-    ? ['Warehouse Administrator', 'Operations Admin', 'Data Entry Specialist', 'Bot Developer']
-    : ['Warehouse Administrator', 'Operations Admin', 'Data Entry Specialist', 'Bot Developer'];
+    ? ['IT Operations & Automation Specialist', 'Junior Specialist', 'Operations Admin', 'Bot Developer']
+    : ['IT Operations & Automation Specialist', 'Junior Specialist', 'Operations Admin', 'Bot Developer'];
 
   return (
     <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0 2rem' }}>
