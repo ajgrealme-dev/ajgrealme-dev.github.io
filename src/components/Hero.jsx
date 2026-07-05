@@ -138,7 +138,7 @@ export default function Hero() {
             {t.hero.cta}
           </motion.a>
           <motion.a
-            href="/CV_Aziz_Maulana.pdf" download
+            href="/CV_Aziz_Maulana_IT_Operations.pdf" download
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{

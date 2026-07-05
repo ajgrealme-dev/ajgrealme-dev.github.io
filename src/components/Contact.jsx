@@ -104,7 +104,7 @@ export default function Contact() {
             ))}
 
             {/* Download CV button */}
-            <motion.a href="/CV_Aziz_Maulana.pdf" download
+            <motion.a href="/CV_Aziz_Maulana_IT_Operations.pdf" download
               whileHover={{ scale: 1.03, boxShadow: isDark ? `0 0 30px ${accentColor}40` : '0 10px 30px rgba(99,102,241,0.3)' }}
               whileTap={{ scale: 0.97 }}
               initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.6 }}
