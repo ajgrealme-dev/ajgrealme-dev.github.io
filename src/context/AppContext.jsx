@@ -49,6 +49,19 @@ export const translations = {
           ],
         },
         {
+          title: 'Job Scraper Bot',
+          icon: '🕷️',
+          period: 'Juli 2026 – Sekarang',
+          tag: 'Python · BeautifulSoup · Pandas · SMTP',
+          desc: 'Bot pencari kerja dan pengirim lamaran otomatis yang mengekstrak data dari berbagai portal lowongan kerja dan memverifikasi validitas email via SMTP.',
+          points: [
+            'Scraping data dari website perusahaan dan portal lowongan kerja',
+            'Sistem deteksi formulir cerdas dan verifikasi validitas email via SMTP untuk mencegah bounce',
+            'Personalisasi draf email dinamis sesuai dengan nama perusahaan dan posisi',
+            'Manajemen database prospek ke format Excel (Pandas) untuk pelaporan terstruktur'
+          ]
+        },
+        {
           title: 'Robot Sakti (Otomasi Trading AI Hedge Fund)',
           icon: '📈',
           period: 'Desember 2025 – Sekarang',
@@ -147,6 +160,19 @@ export const translations = {
             'Auto-reconciliation system for daily bookkeeping audit',
             '3-level digital leave approval flow (Shift → Department → Division)',
           ],
+        },
+        {
+          title: 'Job Scraper Bot',
+          icon: '🕷️',
+          period: 'July 2026 – Present',
+          tag: 'Python · BeautifulSoup · Pandas · SMTP',
+          desc: 'An automated job search and application bot that extracts data from various job portals and verifies email validity via SMTP.',
+          points: [
+            'Scrapes company websites and local job boards for potential leads',
+            'Intelligent contact form detection and email validity verification via SMTP to prevent bounces',
+            'Dynamic email draft personalization matching company names and job titles',
+            'Lead database management exported to Excel (Pandas) for structured reporting'
+          ]
         },
         {
           title: 'Robot Sakti (AI Hedge Fund Automated Trading)',

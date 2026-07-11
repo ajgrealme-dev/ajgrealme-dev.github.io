@@ -115,6 +115,33 @@ function FlipCard({ project, isDark, scrollVelocity = 0 }) {
             ))}
           </ul>
 
+          {['AgentFlow Bot', 'Job Scraper Bot'].includes(project.title) && (
+            <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+              <a 
+                href={`/?demo=${project.title === 'AgentFlow Bot' ? 'agentflow' : 'jobscraper'}`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  display: 'inline-block',
+                  background: isDark ? 'linear-gradient(90deg, rgba(57,255,20,0.1), rgba(0,245,255,0.1))' : 'linear-gradient(90deg, rgba(139,92,246,0.1), rgba(99,102,241,0.1))',
+                  border: `1px solid ${isDark ? '#39ff14' : '#8b5cf6'}`,
+                  color: isDark ? '#39ff14' : '#8b5cf6',
+                  padding: '8px 20px',
+                  borderRadius: '20px',
+                  fontSize: '0.85rem',
+                  fontWeight: 'bold',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  textDecoration: 'none',
+                  boxShadow: isDark ? '0 0 10px rgba(57,255,20,0.3)' : 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                ⚡ Lihat Demo Bot
+              </a>
+            </div>
+          )}
+
           <div style={{ marginTop: '2rem', color: subColor, fontSize: '0.8rem', textAlign: 'center' }}>
             {isDark ? '↺ Klik untuk kembali' : '↺ Click to go back'}
           </div>

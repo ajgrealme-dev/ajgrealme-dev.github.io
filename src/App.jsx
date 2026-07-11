@@ -91,7 +91,21 @@ function AppContent() {
   );
 }
 
+import TerminalDemo from './components/TerminalDemo';
+
 export default function App() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const demoParam = urlParams.get('demo');
+
+  if (demoParam) {
+    return (
+      <>
+        <CustomCursor />
+        <TerminalDemo botType={demoParam} />
+      </>
+    );
+  }
+
   return (
     <AppProvider>
       <AppContent />
